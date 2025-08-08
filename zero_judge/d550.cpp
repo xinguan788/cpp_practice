@@ -1,5 +1,6 @@
 #include <iostream>
 #include <vector>
+
 using namespace std;
 
 bool cmp(const vector<int> &a, const vector<int> &b){
@@ -11,32 +12,35 @@ bool cmp(const vector<int> &a, const vector<int> &b){
     }
     return false;
 }
-vector<vector<int>> qs(vector<vector<int>> v){
-    int s = v.size();
-    if(s <= 1) return v;
 
-    vector<int> pivot = v[s - 1];
-    vector<vector<int>> less, greater;
-    for(int i = 0; i < s - 1; i++){
-        if(cmp(v[i], pivot)){
-            less.push_back(v[i]);
+void merge(vector<vector<int>> &v, int front, int mid, int end){
+    vector<vector<int>> temp;
+    int i = front, j = mid + 1;
+    while(i <= mid && j <= end){
+        if(cmp(v[i], v[j])){
+            temp.push_back(v[i]);
+            i++;
         } else {
-            greater.push_back(v[i]);
+            temp.push_back(v[j]);
+            j++;
         }
     }
+    while(i <= mid) temp.push_back(v[i++]);
+    while(j <= end) temp.push_back(v[j++]);
+    for(int k = front; k <= end; k++) v[k] = temp[k - front];
+}
 
-    less = qs(less);
-    greater = qs(greater);
-
-    vector<vector<int>> res;
-    res.insert(res.end(), less.begin(), less.end());
-    res.push_back(pivot);
-    res.insert(res.end(), greater.begin(), greater.end());
-
-    return res;
+void merge_sort(vector<vector<int>> &v, int front, int end){
+    if(front >= end) return;
+    int mid = (front + end) / 2;
+    merge_sort(v, front, mid);
+    merge_sort(v, mid + 1, end);
+    merge(v, front, mid, end);
 }
 
 int main(){
+    ios::sync_with_stdio(false);
+    cin.tie(nullptr);
     int m, n;
     cin >> m >> n;
     vector<vector<int>> v(m, vector<int>(n));
@@ -45,9 +49,7 @@ int main(){
             cin >> v[i][j];
         }
     }
-
-    v = qs(v);
-
+    merge_sort(v, 0, m - 1);
     for(auto &x : v){
         for(auto y : x){
             cout << y << " ";
