@@ -26,8 +26,8 @@ int main(){
             if(isNegative) cout << "-";
             cout << f << "\n";
         }else{
-            if(isNegative) cout << "-";
             if(f[idx + 3] >= '5'){
+                if(isNegative) cout << "-";
                 f[idx + 3] = '\0';
                 f[idx + 2]++;
                 int c = 0;
@@ -46,8 +46,8 @@ int main(){
                 }
                 cout << f << '\n';
             }else{
-                f[idx + 3] == '\0';
-                if(isNegative && f[3] == '0' && f[2] == '0' && f[0] == 0){
+                f[idx + 3] = '\0';
+                if(isNegative && f[3] == '0' && f[2] == '0' && f[0] == '0'){
                     cout <<"0.00\n";
                 }else{
                     if(isNegative) cout << "-";
